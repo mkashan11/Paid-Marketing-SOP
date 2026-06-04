@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ads Strategy Hub — Meta & Google</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Inter+Tight:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --meta:#1877F2;--meta-soft:#E8F0FE;--meta-mid:#BBCFFC;--meta-dark:#0D3D87;
+  --goo:#EA4335;--goo-soft:#FDECEA;--goo-mid:#F9BFBB;--goo-dark:#8B1F17;
+  --green:#1A7A4A;--green-soft:#E3F5EC;
+  --amber:#9A5E00;--amber-soft:#FEF3D0;
+  --red:#B91C1C;--red-soft:#FEE2E2;
+  --ink:#0F172A;--ink2:#475569;--ink3:#94A3B8;
+  --line:#E2E8F0;--line2:#CBD5E1;
+  --bg:#F8FAFC;--card:#FFFFFF;--surf:#F1F5F9;
+  --r:12px;--r2:8px;--r3:20px;
+  font-family:'Inter',sans-serif;
+}
+body{background:var(--bg);color:var(--ink);min-height:100vh;font-size:14px;line-height:1.65}
+
+/* TOP NAV */
+.topnav{background:var(--card);border-bottom:1px solid var(--line);padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:200}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-icon{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff}
+.bi-m{background:linear-gradient(135deg,#1877F2,#0D3D87)}
+.bi-g{background:linear-gradient(135deg,#EA4335,#8B1F17)}
+.brand-name{font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-.3px}
+.brand-sub{font-size:11px;color:var(--ink3);font-weight:400}
+
+/* PLATFORM SWITCHER */
+.plat-switch{display:flex;background:var(--surf);border-radius:10px;padding:3px;gap:2px}
+.ps-btn{padding:7px 18px;border-radius:8px;font-size:13px;font-weight:500;color:var(--ink2);cursor:pointer;transition:all .2s;border:none;background:transparent;display:flex;align-items:center;gap:7px}
+.ps-btn:hover{color:var(--ink)}
+.ps-btn.on-meta{background:var(--card);color:var(--meta);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.ps-btn.on-google{background:var(--card);color:var(--goo);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.ps-dot{width:7px;height:7px;border-radius:50%}
+.pd-m{background:var(--meta)}
+.pd-g{background:var(--goo)}
+
+/* LAYOUT */
+.layout{display:flex;min-height:calc(100vh - 58px)}
+.sidebar{width:210px;flex-shrink:0;background:var(--card);border-right:1px solid var(--line);padding:16px 0;position:sticky;top:58px;height:calc(100vh - 58px);overflow-y:auto}
+.main{flex:1;padding:28px 32px;max-width:860px}
+
+/* SIDEBAR */
+.sb-group{margin-bottom:8px}
+.sb-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);padding:6px 18px 2px}
+.sb-item{display:flex;align-items:center;gap:9px;padding:9px 18px;font-size:13px;color:var(--ink2);cursor:pointer;border-left:2px solid transparent;transition:all .15s}
+.sb-item:hover{background:var(--bg);color:var(--ink)}
+.sb-item.a-m{background:var(--meta-soft);color:var(--meta);border-left-color:var(--meta);font-weight:500}
+.sb-item.a-g{background:var(--goo-soft);color:var(--goo);border-left-color:var(--goo);font-weight:500}
+.sb-icon{font-size:15px;opacity:.75;flex-shrink:0}
+.sb-divider{height:1px;background:var(--line);margin:10px 18px}
+
+/* PANEL + SECTION */
+.panel{display:none}.panel.on{display:block}
+.sec{display:none}.sec.on{display:block}
+
+/* PAGE TITLE */
+.pg-head{margin-bottom:24px}
+.pg-head h1{font-family:'Inter Tight',sans-serif;font-size:22px;font-weight:700;color:var(--ink);margin-bottom:3px;letter-spacing:-.4px}
+.pg-head p{font-size:13px;color:var(--ink3)}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;margin-bottom:14px}
+.card-hd{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--ink3);margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+
+/* BADGE PLATFORM */
+.badge-m{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;background:var(--meta-soft);color:var(--meta-dark)}
+.badge-g{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;background:var(--goo-soft);color:var(--goo-dark)}
+
+/* CHECKLIST */
+.cl{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:6px}
+.cl li{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--surf);border-radius:var(--r2);font-size:12.5px;color:var(--ink2)}
+.cl-icon{width:15px;height:15px;flex-shrink:0;color:var(--green)}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:0}
+.step{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}
+.step:last-child{border-bottom:none}
+.snum{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px}
+.sn-m{background:var(--meta-soft);color:var(--meta-dark)}
+.sn-g{background:var(--goo-soft);color:var(--goo-dark)}
+.sn-w{background:var(--amber-soft);color:var(--amber)}
+.s-text{font-size:13px;color:var(--ink);line-height:1.5}
+.s-sub{font-size:11px;color:var(--ink3);margin-top:2px}
+
+/* KPI TABLE */
+.kt{width:100%;border-collapse:collapse}
+.kt th{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);padding:0 12px 10px 0;text-align:left;border-bottom:1px solid var(--line)}
+.kt th:last-child,.kt td:last-child{text-align:right;padding-right:0}
+.kt td{padding:11px 12px 11px 0;border-bottom:1px solid var(--line);vertical-align:middle}
+.kt tr:last-child td{border-bottom:none}
+.kn{font-weight:500;font-size:13px;color:var(--ink)}
+.kd{font-size:11px;color:var(--ink3);margin-top:2px}
+.kt-g{font-size:14px;font-weight:600;color:var(--green)}
+.kt-a{font-size:14px;font-weight:600;color:var(--amber)}
+
+/* STATUS ROW */
+.st-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.st-pill{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:500}
+.sp-g{background:var(--green-soft);color:var(--green)}
+.sp-a{background:var(--amber-soft);color:var(--amber)}
+.sp-r{background:var(--red-soft);color:var(--red)}
+
+/* METRIC TILE */
+.mtile{background:var(--surf);border-radius:var(--r2);padding:14px 16px;border:1px solid var(--line)}
+.mt-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ink3);margin-bottom:5px}
+.mt-val{font-size:19px;font-weight:600;color:var(--ink);line-height:1.2}
+.mt-sub{font-size:11px;color:var(--ink2);margin-top:3px}
+
+/* WIN/LOSS */
+.wg{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.wcard{border-radius:var(--r);padding:16px;border:1px solid}
+.wc-t{font-size:13px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.wc-l{font-size:12px;color:var(--ink2);list-style:none}
+.wc-l li{margin-bottom:5px;padding-left:14px;position:relative}
+.wc-l li::before{content:'·';position:absolute;left:0;color:var(--ink3)}
+.wg-ok{background:var(--green-soft);border-color:#86EFAC}.wg-ok .wc-t{color:var(--green)}
+.wg-am{background:var(--amber-soft);border-color:#FCD34D}.wg-am .wc-t{color:var(--amber)}
+.wg-rd{background:var(--red-soft);border-color:#FCA5A5}.wg-rd .wc-t{color:var(--red)}
+
+/* BAR */
+.bar-wrap{margin-top:6px}
+.bar-lbl{display:flex;justify-content:space-between;font-size:11px;color:var(--ink3);margin-bottom:6px}
+.bar-track{height:10px;background:var(--surf);border-radius:5px;overflow:hidden;display:flex}
+.b-meta{background:var(--meta);border-radius:5px 0 0 5px}
+.b-retg{background:#60A5FA}
+.bar-foot{display:flex;justify-content:space-between;font-size:11px;color:var(--ink3);margin-top:4px}
+
+/* NOTE */
+.note{font-size:12px;color:var(--ink2);padding:10px 14px;background:var(--surf);border-radius:var(--r2);border-left:3px solid var(--line2);line-height:1.6;margin-top:12px}
+.note-m{border-left-color:var(--meta)}
+.note-g{border-left-color:var(--goo)}
+
+/* PILLS */
+.ptags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.ptag{padding:4px 12px;border-radius:20px;font-size:11px;background:var(--surf);color:var(--ink2);border:1px solid var(--line)}
+
+/* SECTION DIVIDER */
+.sdiv{height:1px;background:var(--line);margin:22px 0}
+.sdiv-label{font-size:12px;font-weight:600;color:var(--ink2);margin-bottom:8px}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .sidebar{display:none}
+  .topnav{padding:0 16px}
+  .main{padding:16px}
+  .wg{grid-template-columns:1fr}
+  .g2{grid-template-columns:1fr}
+}
+@media(max-width:480px){.cl{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="brand">
+    <div class="brand-icon bi-m">M</div>
+    <div class="brand-icon bi-g">G</div>
+    <div>
+      <div class="brand-name">Ads Strategy Hub</div>
+      <div class="brand-sub">Complete SOP · KPIs · Strategy</div>
+    </div>
+  </div>
+  <div class="plat-switch">
+    <button class="ps-btn on-meta" id="btn-meta" onclick="switchPlatform('meta')">
+      <span class="ps-dot pd-m"></span> Meta Ads
+    </button>
+    <button class="ps-btn" id="btn-google" onclick="switchPlatform('google')">
+      <span class="ps-dot pd-g"></span> Google Ads
+    </button>
+  </div>
+</nav>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div id="sb-meta">
+    <div class="sb-group">
+      <div class="sb-label">Meta Ads</div>
+      <div class="sb-item a-m" data-p="meta" data-s="overview" onclick="nav('meta','overview')">
+        <span class="sb-icon">⊞</span> Overview
+      </div>
+      <div class="sb-item" data-p="meta" data-s="kpi" onclick="nav('meta','kpi')">
+        <span class="sb-icon">◎</span> KPIs & Benchmarks
+      </div>
+      <div class="sb-item" data-p="meta" data-s="structure" onclick="nav('meta','structure')">
+        <span class="sb-icon">⬡</span> Campaign Structure
+      </div>
+      <div class="sb-item" data-p="meta" data-s="creative" onclick="nav('meta','creative')">
+        <span class="sb-icon">◈</span> Creative Testing
+      </div>
+      <div class="sb-item" data-p="meta" data-s="sop" onclick="nav('meta','sop')">
+        <span class="sb-icon">✓</span> SOP & Optimization
+      </div>
+      <div class="sb-item" data-p="meta" data-s="winloss" onclick="nav('meta','winloss')">
+        <span class="sb-icon">★</span> Win / Loss
+      </div>
+    </div>
+  </div>
+  <div id="sb-google" style="display:none">
+    <div class="sb-group">
+      <div class="sb-label">Google Ads</div>
+      <div class="sb-item a-g" data-p="google" data-s="g-overview" onclick="nav('google','g-overview')">
+        <span class="sb-icon">⊞</span> Overview
+      </div>
+      <div class="sb-item" data-p="google" data-s="g-kpi" onclick="nav('google','g-kpi')">
+        <span class="sb-icon">◎</span> KPIs & Benchmarks
+      </div>
+      <div class="sb-item" data-p="google" data-s="g-structure" onclick="nav('google','g-structure')">
+        <span class="sb-icon">⬡</span> Campaign Structure
+      </div>
+      <div class="sb-item" data-p="google" data-s="g-keywords" onclick="nav('google','g-keywords')">
+        <span class="sb-icon">◎</span> Keyword Strategy
+      </div>
+      <div class="sb-item" data-p="google" data-s="g-sop" onclick="nav('google','g-sop')">
+        <span class="sb-icon">✓</span> SOP & Optimization
+      </div>
+      <div class="sb-item" data-p="google" data-s="g-winloss" onclick="nav('google','g-winloss')">
+        <span class="sb-icon">★</span> Win / Loss
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+<!-- ===== META PANEL ===== -->
+<div class="panel on" id="panel-meta">
+
+  <!-- META OVERVIEW -->
+  <div class="sec on" id="sec-meta-overview">
+    <div class="pg-head">
+      <h1>Meta Ads — Overview & Discovery</h1>
+      <p>Everything you need before launching a single campaign</p>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="card-hd">Business Information</div>
+        <ul class="cl">
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Product / Service details</li>
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>AOV (Average Order Value)</li>
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Profit margins</li>
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Sales cycle length</li>
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Existing customer data</li>
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Previous Meta Ads performance</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-hd">Audience Research</div>
+        <ul class="cl">
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Ideal customer profile (ICP)</li>
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Demographics & interests</li>
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Pain points & triggers</li>
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Competitor audience insights</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd">Tracking Setup</div>
+      <ul class="cl">
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Meta Pixel installed & verified</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Conversion API (CAPI) active</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Events set up & prioritized (AEM)</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Domain verified in Business Manager</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>CRM integration (if applicable)</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Custom conversions created</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-hd">Meta Ads Best Practices</div>
+      <div class="steps">
+        <div class="step"><div class="snum sn-m">1</div><div><div class="s-text">Prioritize creative testing over audience testing — creatives win the auction.</div><div class="s-sub">Refresh every 2–4 weeks to avoid fatigue</div></div></div>
+        <div class="step"><div class="snum sn-m">2</div><div class="s-text">Use Conversion API (CAPI) wherever possible — better signal, better optimization.</div></div>
+        <div class="step"><div class="snum sn-m">3</div><div class="s-text">Focus on conversion events, not vanity metrics like reach or impressions.</div></div>
+        <div class="step"><div class="snum sn-m">4</div><div><div class="s-text">Avoid frequent budget changes — protect the learning phase.</div><div class="s-sub">Scale by max 15–20% every 3–4 days</div></div></div>
+        <div class="step"><div class="snum sn-m">5</div><div class="s-text">Use broad targeting when you have 500+ monthly conversion events.</div></div>
+        <div class="step"><div class="snum sn-m">6</div><div class="s-text">Build strong retargeting funnels — warm audiences convert 3–5× cheaper.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- META KPI -->
+  <div class="sec" id="sec-meta-kpi">
+    <div class="pg-head">
+      <h1>Meta Ads — KPIs & Benchmarks</h1>
+      <p>Industry-standard numbers for every campaign type</p>
+    </div>
+    <div class="sdiv-label">E-commerce</div>
+    <div class="card">
+      <div class="card-hd">Primary KPIs</div>
+      <table class="kt">
+        <thead><tr><th>KPI</th><th>Definition</th><th>Target</th></tr></thead>
+        <tbody>
+          <tr><td><div class="kn">ROAS</div><div class="kd">Revenue ÷ ad spend</div></td><td><span style="font-size:11px;color:var(--ink3)">Return on Ad Spend</span></td><td><div class="kt-g">2×–4× min</div><div class="kd">Aim 3×–5× at scale</div></td></tr>
+          <tr><td><div class="kn">Cost Per Purchase (CPA)</div><div class="kd">Spend ÷ total purchases</div></td><td><span style="font-size:11px;color:var(--ink3)">Profitability measure</span></td><td><div class="kt-g">&lt; 30% of AOV</div><div class="kd">AOV $100 → max CPA $30</div></td></tr>
+          <tr><td><div class="kn">Purchase CVR</div><div class="kd">Purchases ÷ landing page sessions</div></td><td><span style="font-size:11px;color:var(--ink3)">Landing page quality</span></td><td><div class="kt-g">1%–3%</div><div class="kd">3%+ is strong for cold traffic</div></td></tr>
+        </tbody>
+      </table>
+      <div class="st-row">
+        <div class="st-pill sp-g">✓ ROAS ≥ 3× → Scale</div>
+        <div class="st-pill sp-a">⚡ ROAS 1.5×–3× → Optimize</div>
+        <div class="st-pill sp-r">✗ ROAS &lt; 1.5× → Pause</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd">Secondary KPIs</div>
+      <table class="kt">
+        <thead><tr><th>KPI</th><th>Formula</th><th>Benchmark</th></tr></thead>
+        <tbody>
+          <tr><td><div class="kn">CTR</div></td><td><span style="font-size:11px;color:var(--ink3)">Clicks ÷ impressions</span></td><td><div class="kt-g">1%–3%</div><div class="kd">&gt; 2% is strong</div></td></tr>
+          <tr><td><div class="kn">CPC</div></td><td><span style="font-size:11px;color:var(--ink3)">Spend ÷ clicks</span></td><td><div class="kt-g">$0.50–$2.00</div><div class="kd">Varies by niche</div></td></tr>
+          <tr><td><div class="kn">CPM</div></td><td><span style="font-size:11px;color:var(--ink3)">Spend ÷ impressions × 1,000</span></td><td><div class="kt-g">$8–$20</div><div class="kd">Q4 spikes to $30–$50</div></td></tr>
+          <tr><td><div class="kn">Add to Cart Rate</div></td><td><span style="font-size:11px;color:var(--ink3)">ATCs ÷ page sessions</span></td><td><div class="kt-g">5%–15%</div><div class="kd">&lt;5% = LP/offer issue</div></td></tr>
+          <tr><td><div class="kn">Checkout Initiation Rate</div></td><td><span style="font-size:11px;color:var(--ink3)">Checkouts ÷ ATCs</span></td><td><div class="kt-g">50%–70%</div><div class="kd">&lt;50% = checkout friction</div></td></tr>
+          <tr><td><div class="kn">Frequency</div></td><td><span style="font-size:11px;color:var(--ink3)">Impressions ÷ reach</span></td><td><div class="kt-a">1.5–3.0</div><div class="kd">&gt;3.5 = creative fatigue</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="sdiv"></div>
+    <div class="sdiv-label">Lead Generation</div>
+    <div class="card">
+      <div class="card-hd">Primary KPIs</div>
+      <table class="kt">
+        <thead><tr><th>KPI</th><th>Formula</th><th>Target</th></tr></thead>
+        <tbody>
+          <tr><td><div class="kn">Cost Per Lead (CPL)</div></td><td><span style="font-size:11px;color:var(--ink3)">Spend ÷ leads</span></td><td><div class="kt-g">&lt; 20% of deal value</div><div class="kd">$500 service → CPL &lt; $100</div></td></tr>
+          <tr><td><div class="kn">Qualified Lead Rate</div></td><td><span style="font-size:11px;color:var(--ink3)">SQLs ÷ total leads</span></td><td><div class="kt-g">20%–40%</div><div class="kd">&lt;20% = audience mismatch</div></td></tr>
+          <tr><td><div class="kn">Booked Appointments</div></td><td><span style="font-size:11px;color:var(--ink3)">Booked ÷ leads</span></td><td><div class="kt-g">30%–60% of leads</div></td></tr>
+          <tr><td><div class="kn">Cost Per Appointment</div></td><td><span style="font-size:11px;color:var(--ink3)">Spend ÷ appointments</span></td><td><div class="kt-g">&lt; 30% of deal value</div></td></tr>
+        </tbody>
+      </table>
+      <div class="st-row">
+        <div class="st-pill sp-g">✓ CPL &lt; 15% deal → Scale</div>
+        <div class="st-pill sp-a">⚡ CPL 15%–25% → Optimize</div>
+        <div class="st-pill sp-r">✗ CPL &gt; 30% deal → Pause</div>
+      </div>
+    </div>
+    <div class="sdiv"></div>
+    <div class="sdiv-label">Awareness</div>
+    <div class="card">
+      <table class="kt">
+        <thead><tr><th>KPI</th><th>Formula</th><th>Benchmark</th></tr></thead>
+        <tbody>
+          <tr><td><div class="kn">Cost per Reach</div></td><td><span style="font-size:11px;color:var(--ink3)">Spend ÷ unique reach</span></td><td><div class="kt-g">&lt; $0.02</div></td></tr>
+          <tr><td><div class="kn">CPM</div></td><td><span style="font-size:11px;color:var(--ink3)">Spend ÷ impressions × 1,000</span></td><td><div class="kt-g">$5–$15</div></td></tr>
+          <tr><td><div class="kn">Cost per ThruPlay</div></td><td><span style="font-size:11px;color:var(--ink3)">Spend ÷ 15-sec video views</span></td><td><div class="kt-g">&lt; $0.05</div><div class="kd">&lt;$0.02 is excellent</div></td></tr>
+          <tr><td><div class="kn">Hook Rate (3-sec views)</div></td><td><span style="font-size:11px;color:var(--ink3)">3-sec views ÷ impressions</span></td><td><div class="kt-g">&gt; 25%</div><div class="kd">&lt;15% = fix the hook</div></td></tr>
+          <tr><td><div class="kn">Video Completion Rate</div></td><td><span style="font-size:11px;color:var(--ink3)">Full views ÷ total views</span></td><td><div class="kt-g">25%–50%</div><div class="kd">&gt;40% = strong hook</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note note-m">Rule: CPA should never exceed 30% of AOV to maintain profitability. If margins are thin (&lt;40%), keep CPA under 20% of AOV. For B2B lead gen, CPLs of $50–$300+ are normal due to higher deal values.</div>
+  </div>
+
+  <!-- META STRUCTURE -->
+  <div class="sec" id="sec-meta-structure">
+    <div class="pg-head">
+      <h1>Meta Ads — Campaign Structure</h1>
+      <p>How to build your prospecting and retargeting funnels</p>
+    </div>
+    <div class="card">
+      <div class="card-hd">Prospecting Campaigns</div>
+      <div class="g2">
+        <div class="steps">
+          <div class="step"><div class="snum sn-m">1</div><div><div class="s-text">Broad Audience</div><div class="s-sub">No targeting restrictions. Best when 500+ monthly conversions.</div></div></div>
+          <div class="step"><div class="snum sn-m">2</div><div><div class="s-text">Interest-Based Audience</div><div class="s-sub">Layered interests + demographics. Good for cold starts.</div></div></div>
+        </div>
+        <div class="steps">
+          <div class="step"><div class="snum sn-m">3</div><div><div class="s-text">Lookalike Audiences</div><div class="s-sub">1% LAL = tightest match; 3–5% = broader reach.</div></div></div>
+          <div class="step"><div class="snum sn-m">4</div><div><div class="s-text">Customer Lookalikes</div><div class="s-sub">Upload CRM list → Meta finds similar users. Best LAL source.</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd">Retargeting Campaigns</div>
+      <ul class="cl">
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Website Visitors (7, 14, 30-day)</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Add to Cart (abandoned)</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Initiate Checkout (high intent)</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Engaged Users (FB/IG page)</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Video Viewers (25%, 50%, 75%)</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Past Customers (upsell / LTV)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-hd">Budget Allocation</div>
+      <div class="bar-wrap">
+        <div class="bar-lbl"><span style="color:var(--meta);font-weight:500">Prospecting — 70–80%</span><span style="color:#3B82F6;font-weight:500">Retargeting — 20–30%</span></div>
+        <div class="bar-track"><div class="b-meta" style="width:75%"></div><div class="b-retg" style="width:25%"></div></div>
+        <div class="bar-foot"><span>New audience acquisition</span><span>Warm audience conversion</span></div>
+      </div>
+      <div class="note note-m">Adjust split as account matures. More retarget budget when pixel data is strong. Less when scaling aggressively into new audiences.</div>
+    </div>
+  </div>
+
+  <!-- META CREATIVE -->
+  <div class="sec" id="sec-meta-creative">
+    <div class="pg-head">
+      <h1>Meta Ads — Creative Testing Framework</h1>
+      <p>Creative is the biggest lever in Meta Ads — test systematically</p>
+    </div>
+    <div class="card">
+      <div class="card-hd">Creative Types to Test</div>
+      <div class="g3">
+        <div class="mtile"><div class="mt-label">Format 1</div><div class="mt-val" style="font-size:14px">UGC Videos</div><div class="mt-sub">User-generated, authentic feel</div></div>
+        <div class="mtile"><div class="mt-label">Format 2</div><div class="mt-val" style="font-size:14px">Founder Videos</div><div class="mt-sub">Story-driven, builds trust</div></div>
+        <div class="mtile"><div class="mt-label">Format 3</div><div class="mt-val" style="font-size:14px">Testimonials</div><div class="mt-sub">Social proof, real results</div></div>
+        <div class="mtile"><div class="mt-label">Format 4</div><div class="mt-val" style="font-size:14px">Product Demos</div><div class="mt-sub">Show product in action</div></div>
+        <div class="mtile"><div class="mt-label">Format 5</div><div class="mt-val" style="font-size:14px">Before & After</div><div class="mt-sub">Transformation, results</div></div>
+        <div class="mtile"><div class="mt-label">Format 6</div><div class="mt-val" style="font-size:14px">Problem → Solution</div><div class="mt-sub">Pain-aware messaging</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd">What to Test in Each Creative</div>
+      <div class="g2">
+        <div class="steps">
+          <div class="step"><div class="snum sn-m">A</div><div><div class="s-text">Hooks (First 1–3 seconds)</div><div class="s-sub">Stop the scroll. Test question vs statement vs shock.</div></div></div>
+          <div class="step"><div class="snum sn-m">B</div><div><div class="s-text">Headlines</div><div class="s-sub">Value prop clarity — benefit vs feature framing.</div></div></div>
+          <div class="step"><div class="snum sn-m">C</div><div><div class="s-text">CTAs</div><div class="s-sub">Shop Now vs Learn More vs Get Offer vs Claim Discount</div></div></div>
+        </div>
+        <div class="steps">
+          <div class="step"><div class="snum sn-m">D</div><div><div class="s-text">Offers</div><div class="s-sub">% discount vs fixed $ off vs free shipping vs bundle</div></div></div>
+          <div class="step"><div class="snum sn-m">E</div><div><div class="s-text">Formats</div><div class="s-sub">Single image vs video vs carousel vs Reel</div></div></div>
+          <div class="step"><div class="snum sn-m">F</div><div><div class="s-text">Ad Length</div><div class="s-sub">Short (15s) vs long-form (60s+) — test both</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="note note-m">Testing rule: change one variable at a time. Run each creative until 50+ link clicks before judging. Kill losers fast, scale winners slowly (+15–20% budget every 3–4 days).</div>
+  </div>
+
+  <!-- META SOP -->
+  <div class="sec" id="sec-meta-sop">
+    <div class="pg-head">
+      <h1>Meta Ads — SOP & Optimization</h1>
+      <p>Step-by-step process for launching and scaling campaigns</p>
+    </div>
+    <div class="card">
+      <div class="card-hd">Launch Checklist</div>
+      <ul class="cl">
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Pixel events verified firing</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Conversion API (CAPI) active</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Custom conversions created</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Audiences configured</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Exclusions applied</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>UTM tracking added to all ads</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Landing page speed tested</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>All forms tested & working</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Ad copy reviewed & approved</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Payment method verified</li>
+      </ul>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="card-hd">First 7 Days</div>
+        <div class="steps">
+          <div class="step"><div class="snum sn-m">→</div><div class="s-text">Monitor delivery & learning phase status</div></div>
+          <div class="step"><div class="snum sn-m">→</div><div class="s-text">Confirm events are firing correctly</div></div>
+          <div class="step"><div class="snum sn-m">→</div><div class="s-text">Watch CTR and CPM only — no CPA decisions yet</div></div>
+          <div class="step"><div class="snum sn-w">⚠</div><div><div class="s-text" style="color:var(--amber)">Avoid ANY major edits</div><div class="s-sub">Major edits reset the learning phase</div></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd">After Learning Phase</div>
+        <div class="steps">
+          <div class="step"><div class="snum sn-m">1</div><div class="s-text">Analyze CPA, ROAS, CVR, Frequency</div></div>
+          <div class="step"><div class="snum sn-m">2</div><div class="s-text">Pause weak creatives (bottom 20% by CPA)</div></div>
+          <div class="step"><div class="snum sn-m">3</div><div><div class="s-text">Scale winners — budget +15–20% every 3–4 days</div></div></div>
+          <div class="step"><div class="snum sn-m">4</div><div class="s-text">Refresh fatigued creatives — frequency &gt;3.5 warns</div></div>
+          <div class="step"><div class="snum sn-m">5</div><div class="s-text">Duplicate best ad sets to test new audiences</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd">Scaling Rules</div>
+      <div class="g3">
+        <div class="mtile"><div class="mt-label">Budget increase</div><div class="mt-val">15–20%</div><div class="mt-sub">Max per 3–4 days</div></div>
+        <div class="mtile"><div class="mt-label">When to scale</div><div class="mt-val" style="font-size:14px">CPA stable</div><div class="mt-sub">ROAS consistent + volume growing</div></div>
+        <div class="mtile"><div class="mt-label">Alternative</div><div class="mt-val" style="font-size:14px">Duplicate</div><div class="mt-sub">Duplicate + scale ad set independently</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- META WIN/LOSS -->
+  <div class="sec" id="sec-meta-winloss">
+    <div class="pg-head">
+      <h1>Meta Ads — Win / Loss Framework</h1>
+      <p>Know exactly when to scale, fix, or cut campaigns</p>
+    </div>
+    <div class="card">
+      <div class="wg">
+        <div class="wcard wg-ok"><div class="wc-t">✓ Win — Scale it</div><ul class="wc-l"><li>Target CPA achieved</li><li>ROAS above goal</li><li>Stable conversion volume</li><li>Frequency under 3.0</li></ul></div>
+        <div class="wcard wg-am"><div class="wc-t">⚡ Needs Optimization</div><ul class="wc-l"><li>Good CTR, weak conversions</li><li>Rising CPA trend</li><li>Declining ROAS week-on-week</li><li>High frequency (&gt;3.5)</li></ul></div>
+        <div class="wcard wg-rd"><div class="wc-t">✗ Pause & Review</div><ul class="wc-l"><li>Multiple creatives tested</li><li>Multiple audiences tried</li><li>Different offers A/B tested</li><li>LP improved significantly</li><li>Still no target KPIs hit</li></ul></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd">Optimization Actions by Scenario</div>
+      <div class="steps">
+        <div class="step"><div class="snum sn-m">→</div><div class="s-text">Good engagement, no conversions → Fix landing page or offer. LP CVR &lt;1% is the problem.</div></div>
+        <div class="step"><div class="snum sn-m">→</div><div class="s-text">Rising CPA → Refresh creatives, expand audience, check frequency.</div></div>
+        <div class="step"><div class="snum sn-m">→</div><div class="s-text">Low CTR (&lt;1%) → Hook and creative are the issue. Test 5+ new hooks.</div></div>
+        <div class="step"><div class="snum sn-m">→</div><div class="s-text">High CPM → Audience too narrow or Q4 competition. Broaden or wait.</div></div>
+        <div class="step"><div class="snum sn-m">→</div><div class="s-text">Low ATC rate (&lt;5%) → Offer or product-market fit issue, not ads.</div></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end panel-meta -->
+
+
+<!-- ===== GOOGLE PANEL ===== -->
+<div class="panel" id="panel-google">
+
+  <!-- GOOGLE OVERVIEW -->
+  <div class="sec on" id="sec-google-g-overview">
+    <div class="pg-head">
+      <h1>Google Ads — Overview & Discovery</h1>
+      <p>Foundation setup before any Google campaign goes live</p>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="card-hd">Business Research</div>
+        <ul class="cl">
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Products & services defined</li>
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Search demand volume researched</li>
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Customer intent mapped</li>
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Competitor landscape analyzed</li>
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Website performance baseline set</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-hd">Tracking Setup</div>
+        <ul class="cl">
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>GA4 connected</li>
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Google Tag Manager setup</li>
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Google Ads Conversion Tracking</li>
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Enhanced Conversions enabled</li>
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Merchant Center approved (eComm)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd">Google Ads Best Practices</div>
+      <div class="steps">
+        <div class="step"><div class="snum sn-g">1</div><div><div class="s-text">Track every conversion accurately — bad data = bad optimization decisions.</div><div class="s-sub">Use Enhanced Conversions for better attribution</div></div></div>
+        <div class="step"><div class="snum sn-g">2</div><div><div class="s-text">Continuously add negative keywords — mandatory, not optional.</div><div class="s-sub">Review search terms report every single week</div></div></div>
+        <div class="step"><div class="snum sn-g">3</div><div class="s-text">Focus on search intent, not traffic volume — quality over quantity.</div></div>
+        <div class="step"><div class="snum sn-g">4</div><div class="s-text">Use exact and phrase match for control on key terms.</div></div>
+        <div class="step"><div class="snum sn-g">5</div><div><div class="s-text">Improve landing page experience regularly — it directly affects Quality Score.</div><div class="s-sub">QS 10 can reduce CPC by up to 50% vs QS 5</div></div></div>
+        <div class="step"><div class="snum sn-g">6</div><div class="s-text">Judge success on conversions and profitability — never clicks alone.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GOOGLE KPI -->
+  <div class="sec" id="sec-google-g-kpi">
+    <div class="pg-head">
+      <h1>Google Ads — KPIs & Benchmarks</h1>
+      <p>Industry-standard numbers across campaign types</p>
+    </div>
+    <div class="sdiv-label">E-commerce</div>
+    <div class="card">
+      <div class="card-hd">Primary KPIs</div>
+      <table class="kt">
+        <thead><tr><th>KPI</th><th>Formula</th><th>Target</th></tr></thead>
+        <tbody>
+          <tr><td><div class="kn">ROAS</div></td><td><span style="font-size:11px;color:var(--ink3)">Revenue ÷ ad spend</span></td><td><div class="kt-g">3×–6×</div><div class="kd">Shopping campaigns: 4× baseline</div></td></tr>
+          <tr><td><div class="kn">Cost Per Conversion (CPA)</div></td><td><span style="font-size:11px;color:var(--ink3)">Spend ÷ conversions</span></td><td><div class="kt-g">&lt; 25% of AOV</div><div class="kd">Tighter than Meta — higher purchase intent</div></td></tr>
+          <tr><td><div class="kn">Conversion Rate</div></td><td><span style="font-size:11px;color:var(--ink3)">Conversions ÷ clicks</span></td><td><div class="kt-g">2%–5%</div><div class="kd">Search converts higher than social</div></td></tr>
+        </tbody>
+      </table>
+      <div class="st-row">
+        <div class="st-pill sp-g">✓ ROAS ≥ 4× → Scale</div>
+        <div class="st-pill sp-a">⚡ ROAS 2×–4× → Optimize</div>
+        <div class="st-pill sp-r">✗ ROAS &lt; 2× → Restructure</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd">Secondary KPIs</div>
+      <table class="kt">
+        <thead><tr><th>KPI</th><th>Formula</th><th>Benchmark</th></tr></thead>
+        <tbody>
+          <tr><td><div class="kn">CTR (Search)</div></td><td><span style="font-size:11px;color:var(--ink3)">Clicks ÷ impressions</span></td><td><div class="kt-g">5%–15%</div><div class="kd">Brand: 20%+, Generic: 3%–8%</div></td></tr>
+          <tr><td><div class="kn">CPC (Search)</div></td><td><span style="font-size:11px;color:var(--ink3)">Spend ÷ clicks</span></td><td><div class="kt-g">$0.50–$3.00</div><div class="kd">Legal/Finance: $10–$50</div></td></tr>
+          <tr><td><div class="kn">Impression Share (IS)</div></td><td><span style="font-size:11px;color:var(--ink3)">Impressions received ÷ eligible</span></td><td><div class="kt-g">&gt; 60%</div><div class="kd">&lt;40% = budget or QS issue</div></td></tr>
+          <tr><td><div class="kn">Search Lost IS (Budget)</div></td><td><span style="font-size:11px;color:var(--ink3)">% impressions lost to budget</span></td><td><div class="kt-g">&lt; 20%</div><div class="kd">&gt;30% = increase budget</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="sdiv"></div>
+    <div class="sdiv-label">Lead Generation</div>
+    <div class="card">
+      <div class="card-hd">Primary KPIs</div>
+      <table class="kt">
+        <thead><tr><th>KPI</th><th>Formula</th><th>Target</th></tr></thead>
+        <tbody>
+          <tr><td><div class="kn">Cost Per Lead (CPL)</div></td><td><span style="font-size:11px;color:var(--ink3)">Spend ÷ leads</span></td><td><div class="kt-g">&lt; 15% of deal value</div><div class="kd">Google leads = higher intent</div></td></tr>
+          <tr><td><div class="kn">Qualified Lead Rate</div></td><td><span style="font-size:11px;color:var(--ink3)">SQLs ÷ total leads</span></td><td><div class="kt-g">30%–60%</div><div class="kd">Google search qualifies higher than Meta</div></td></tr>
+          <tr><td><div class="kn">Quality Score</div></td><td><span style="font-size:11px;color:var(--ink3)">Google's 1–10 keyword score</span></td><td><div class="kt-g">7–10</div><div class="kd">&lt;5 = fix ad relevance & LP</div></td></tr>
+        </tbody>
+      </table>
+      <div class="st-row">
+        <div class="st-pill sp-g">✓ CPL &lt; 10% deal → Scale</div>
+        <div class="st-pill sp-a">⚡ CPL 15%–25% → Optimize</div>
+        <div class="st-pill sp-r">✗ CPL &gt; 30% deal → Pause</div>
+      </div>
+    </div>
+    <div class="sdiv"></div>
+    <div class="sdiv-label">Search Campaign Health</div>
+    <div class="card">
+      <table class="kt">
+        <thead><tr><th>KPI</th><th>What it measures</th><th>Target</th></tr></thead>
+        <tbody>
+          <tr><td><div class="kn">Quality Score</div></td><td><span style="font-size:11px;color:var(--ink3)">Keyword-level relevance 1–10</span></td><td><div class="kt-g">7–10</div><div class="kd">Higher QS = lower CPC + better position</div></td></tr>
+          <tr><td><div class="kn">Ad Relevance</div></td><td><span style="font-size:11px;color:var(--ink3)">Ad copy vs keyword match</span></td><td><div class="kt-g">Above Average</div><div class="kd">Include keyword in headline 1</div></td></tr>
+          <tr><td><div class="kn">Landing Page Experience</div></td><td><span style="font-size:11px;color:var(--ink3)">LP relevance & speed</span></td><td><div class="kt-g">Above Average</div><div class="kd">Match LP to ad copy exactly</div></td></tr>
+          <tr><td><div class="kn">Top Impression Share</div></td><td><span style="font-size:11px;color:var(--ink3)">% time in top 3 results</span></td><td><div class="kt-g">&gt; 50%</div><div class="kd">&lt;30% = raise bids or QS</div></td></tr>
+        </tbody>
+      </table>
+      <div class="note note-g">Quality Score impact: QS 10 can reduce CPC by ~50% vs QS 5 for the same position. Better QS = better ranking at lower cost — purely through improved relevance.</div>
+    </div>
+  </div>
+
+  <!-- GOOGLE STRUCTURE -->
+  <div class="sec" id="sec-google-g-structure">
+    <div class="pg-head">
+      <h1>Google Ads — Campaign Structure</h1>
+      <p>Organizing campaigns, ad groups, and remarketing</p>
+    </div>
+    <div class="card">
+      <div class="card-hd">Search Campaign Structure</div>
+      <div class="steps">
+        <div class="step"><div class="snum sn-g" style="font-size:11px">📁</div><div><div class="s-text">Campaign: HVAC Services</div><div class="s-sub">Ad Groups: AC Repair · Heating Repair · Emergency HVAC · AC Installation</div></div></div>
+        <div class="step"><div class="snum sn-g" style="font-size:11px">📁</div><div><div class="s-text">Campaign: Product Category A</div><div class="s-sub">Ad Groups: Brand term · Generic · Competitor · Long-tail buyer keywords</div></div></div>
+      </div>
+      <div class="note note-g">Organize by: Product category → Service type → User intent. Tight ad groups = better ad relevance = higher Quality Score = lower CPC.</div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="card-hd">Performance Max Requirements</div>
+        <ul class="cl" style="grid-template-columns:1fr">
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>High-quality creative assets</li>
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Accurate product feed</li>
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Conversion tracking active</li>
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Audience signals configured</li>
+          <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>50+ conversions/month minimum</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-hd">Shopping Campaign Structure</div>
+        <div class="steps">
+          <div class="step"><div class="snum sn-g">→</div><div class="s-text">Separate by product category</div></div>
+          <div class="step"><div class="snum sn-g">→</div><div class="s-text">Segment by profit margin tiers</div></div>
+          <div class="step"><div class="snum sn-g">→</div><div class="s-text">Best sellers in own campaign</div></div>
+          <div class="step"><div class="snum sn-g">→</div><div class="s-text">Clearance / low margin = lower bids</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd">Ad Extensions — Always Use All Applicable</div>
+      <div class="ptags">
+        <span class="ptag">Sitelinks</span><span class="ptag">Callouts</span><span class="ptag">Structured Snippets</span><span class="ptag">Call Extensions</span><span class="ptag">Location Extensions</span><span class="ptag">Price Extensions</span><span class="ptag">Promotion Extensions</span>
+      </div>
+      <div class="note note-g">Extensions increase ad real estate for free. They don't increase CPC but can boost CTR by 10–20%.</div>
+    </div>
+  </div>
+
+  <!-- GOOGLE KEYWORDS -->
+  <div class="sec" id="sec-google-g-keywords">
+    <div class="pg-head">
+      <h1>Google Ads — Keyword Strategy</h1>
+      <p>Finding and managing the right search terms</p>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="card-hd">High Intent Keywords</div>
+        <div class="steps">
+          <div class="step"><div class="snum sn-g" style="font-size:10px">🔥</div><div><div class="s-text">"buy running shoes"</div><div class="s-sub">Transactional — ready to purchase now</div></div></div>
+          <div class="step"><div class="snum sn-g" style="font-size:10px">🔥</div><div><div class="s-text">"HVAC repair near me"</div><div class="s-sub">Local + urgent intent = highest CVR</div></div></div>
+          <div class="step"><div class="snum sn-g" style="font-size:10px">🔥</div><div><div class="s-text">"best CRM software"</div><div class="s-sub">Comparison — close to decision stage</div></div></div>
+          <div class="step"><div class="snum sn-g" style="font-size:10px">🔥</div><div><div class="s-text">"[product] pricing"</div><div class="s-sub">Commercial intent — evaluating options</div></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd">Commercial Intent Modifiers</div>
+        <div class="ptags" style="margin-top:0">
+          <span class="ptag">pricing</span><span class="ptag">services</span><span class="ptag">quotes</span><span class="ptag">consultation</span><span class="ptag">cost</span><span class="ptag">near me</span><span class="ptag">best</span><span class="ptag">top rated</span><span class="ptag">buy</span><span class="ptag">order</span><span class="ptag">hire</span><span class="ptag">get</span>
+        </div>
+        <div class="note note-g">These modifiers attached to your core terms signal buying intent. Always include in primary ad groups.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd">Match Type Strategy</div>
+      <div class="g3">
+        <div class="mtile"><div class="mt-label">Exact Match</div><div class="mt-val" style="font-size:14px">[keyword]</div><div class="mt-sub">Max control, lower volume. Core money keywords.</div></div>
+        <div class="mtile"><div class="mt-label">Phrase Match</div><div class="mt-val" style="font-size:14px">"keyword"</div><div class="mt-sub">Balanced control + reach. Mid-funnel terms.</div></div>
+        <div class="mtile"><div class="mt-label">Broad Match</div><div class="mt-val" style="font-size:14px">keyword</div><div class="mt-sub">Max reach. Only use with Smart Bidding + strong negatives.</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd">Negative Keywords — Mandatory Expansion</div>
+      <div class="steps">
+        <div class="step"><div class="snum sn-g">1</div><div><div class="s-text">Review Search Terms Report every week — non-negotiable.</div><div class="s-sub">Filter for zero-conversion terms spending budget</div></div></div>
+        <div class="step"><div class="snum sn-g">2</div><div class="s-text">Add irrelevant terms as negatives at campaign or ad group level.</div></div>
+        <div class="step"><div class="snum sn-g">3</div><div class="s-text">Common negatives to start: free, DIY, jobs, salary, course, tutorial, Reddit, YouTube.</div></div>
+        <div class="step"><div class="snum sn-g">4</div><div class="s-text">Use Negative Keyword Lists at account level for global exclusions.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GOOGLE SOP -->
+  <div class="sec" id="sec-google-g-sop">
+    <div class="pg-head">
+      <h1>Google Ads — SOP & Optimization</h1>
+      <p>Launch checklist, weekly tasks, and scaling process</p>
+    </div>
+    <div class="card">
+      <div class="card-hd">Launch Checklist</div>
+      <ul class="cl">
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Conversion tracking verified</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>GA4 connected to Google Ads</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Enhanced conversions enabled</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Negative keywords added</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Ad extensions all configured</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Landing pages tested</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Merchant Center approved</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Audience signals configured</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Billing & budget limits set</li>
+        <li><svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Ad schedule configured</li>
+      </ul>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="card-hd">Weekly Optimization Tasks</div>
+        <div class="steps">
+          <div class="step"><div class="snum sn-g">1</div><div class="s-text">Review search terms report — add negatives</div></div>
+          <div class="step"><div class="snum sn-g">2</div><div class="s-text">Check CTR, CPC, Conversion Rate trends</div></div>
+          <div class="step"><div class="snum sn-g">3</div><div class="s-text">Pause irrelevant or zero-CVR keywords</div></div>
+          <div class="step"><div class="snum sn-g">4</div><div class="s-text">Improve low Quality Score ads (&lt;5)</div></div>
+          <div class="step"><div class="snum sn-g">5</div><div class="s-text">Check bid strategy performance vs targets</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd">Monthly Review Tasks</div>
+        <div class="steps">
+          <div class="step"><div class="snum sn-g">1</div><div class="s-text">Impression Share analysis + lost IS breakdown</div></div>
+          <div class="step"><div class="snum sn-g">2</div><div class="s-text">Auction Insights — who's competing with you</div></div>
+          <div class="step"><div class="snum sn-g">3</div><div class="s-text">Full keyword performance audit</div></div>
+          <div class="step"><div class="snum sn-g">4</div><div class="s-text">Landing page CVR review per ad group</div></div>
+          <div class="step"><div class="snum sn-g">5</div><div class="s-text">Budget pacing & allocation review</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd">Scaling Triggers & Methods</div>
+      <div class="g3">
+        <div class="mtile"><div class="mt-label">Scale when</div><div class="mt-val" style="font-size:13px">CPA profitable + volume growing</div></div>
+        <div class="mtile"><div class="mt-label">Method 1</div><div class="mt-val" style="font-size:13px">Budget +20–30%</div><div class="mt-sub">Gradual increases</div></div>
+        <div class="mtile"><div class="mt-label">Method 2</div><div class="mt-val" style="font-size:13px">Keyword expansion</div><div class="mt-sub">New terms + match types</div></div>
+        <div class="mtile"><div class="mt-label">Method 3</div><div class="mt-val" style="font-size:13px">Geo expansion</div><div class="mt-sub">New cities / regions</div></div>
+        <div class="mtile"><div class="mt-label">Method 4</div><div class="mt-val" style="font-size:13px">New campaign types</div><div class="mt-sub">Add Pmax, Display, YouTube</div></div>
+        <div class="mtile"><div class="mt-label">Check IS first</div><div class="mt-val" style="font-size:13px">IS &gt; 70%?</div><div class="mt-sub">Expand keywords, not budget</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GOOGLE WIN/LOSS -->
+  <div class="sec" id="sec-google-g-winloss">
+    <div class="pg-head">
+      <h1>Google Ads — Win / Loss Framework</h1>
+      <p>Decision tree for every campaign performance scenario</p>
+    </div>
+    <div class="card">
+      <div class="wg">
+        <div class="wcard wg-ok"><div class="wc-t">✓ Win — Scale it</div><ul class="wc-l"><li>CPA below target</li><li>ROAS above goal</li><li>Conversion volume growing</li><li>Quality Scores 7+</li></ul></div>
+        <div class="wcard wg-am"><div class="wc-t">⚡ Needs Optimization</div><ul class="wc-l"><li>Strong traffic, weak CVR</li><li>Low CTR on search ads</li><li>High CPC draining budget</li><li>Low Quality Scores (&lt;5)</li></ul></div>
+        <div class="wcard wg-rd"><div class="wc-t">✗ Stop & Review</div><ul class="wc-l"><li>Keywords optimized fully</li><li>Ads A/B tested</li><li>LP improved significantly</li><li>Search terms refined</li><li>Still no target KPIs</li></ul></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd">Optimization Actions by Scenario</div>
+      <div class="steps">
+        <div class="step"><div class="snum sn-g">→</div><div class="s-text">Good traffic, no conversions → Check LP speed, form, message match, and CTA clarity.</div></div>
+        <div class="step"><div class="snum sn-g">→</div><div class="s-text">Low CTR (&lt;3%) → Rewrite headlines, add keyword to headline 1, test different value props.</div></div>
+        <div class="step"><div class="snum sn-g">→</div><div class="s-text">High CPC → Improve Quality Score, tighten match types, add more negatives.</div></div>
+        <div class="step"><div class="snum sn-g">→</div><div class="s-text">Low IS (&lt;40%) → Increase budget or improve QS to unlock more eligible impressions.</div></div>
+        <div class="step"><div class="snum sn-g">→</div><div class="s-text">Irrelevant search terms → Aggressive negative keyword expansion + tighten to phrase/exact match.</div></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end panel-google -->
+
+</main>
+</div>
+
+<script>
+var S={p:'meta',s:{meta:'overview',google:'g-overview'}};
+
+function switchPlatform(p){
+  S.p=p;
+  document.getElementById('btn-meta').className='ps-btn'+(p==='meta'?' on-meta':'');
+  document.getElementById('btn-google').className='ps-btn'+(p==='google'?' on-google':'');
+  document.querySelectorAll('.panel').forEach(x=>x.classList.remove('on'));
+  document.getElementById('panel-'+p).classList.add('on');
+  document.getElementById('sb-meta').style.display=p==='meta'?'block':'none';
+  document.getElementById('sb-google').style.display=p==='google'?'block':'none';
+  updateSB();
+}
+
+function nav(p,s){
+  S.s[p]=s;
+  document.querySelectorAll('#panel-'+p+' .sec').forEach(x=>x.classList.remove('on'));
+  var el=document.getElementById('sec-'+p+'-'+s);
+  if(el)el.classList.add('on');
+  updateSB();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateSB(){
+  var p=S.p,s=S.s[p];
+  document.querySelectorAll('.sb-item').forEach(i=>{
+    var a=i.dataset.p===p&&i.dataset.s===s;
+    i.className='sb-item'+(a?' a-'+p:'');
+  });
+}
+
+document.getElementById('sb-google').style.display='none';
+</script>
+</body>
+</html>
+HTMLEOF
+echo "Done — $(wc -c < /mnt/user-data/outputs/ads_strategy_v2.html) bytes"
